@@ -1,3 +1,5 @@
+You can download the latest release of the QuickQ app from [GitHub Releases](https://github.com/tully-8888/quickq/releases/tag/1.0.0).
+
 # QuickQ: AI-Powered Interview Preparation Assistant
 
 ## Introduction
