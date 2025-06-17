@@ -1,0 +1,204 @@
+Project Context
+
+    App Name: QuickQ
+    Platform: Android
+    Android Version: API 29+ (Android 10+)
+    Technologies: Kotlin 2.1.0, Jetpack Compose, Clean Architecture, MVVM, Gemini AI API
+    Development Environment: Android Studio, Gradle
+    Kotlin Version: 2.1.0
+    API Integration: Google Gemini 2.0 Flash for AI-powered interview questions and feedback
+
+Project Structure
+
+    Domain Layer (/domain):
+        - model/: Core business models (Job, Interview, InterviewQuestion, InterviewFeedback, enums)
+        - repository/: Repository interfaces (JobRepository, InterviewRepository)
+
+    Data Layer (/data):
+        - constants/: App configuration, API settings, and limits
+        - dto/: Gemini API request/response DTOs
+        - api/: GeminiApiService for HTTP client communication
+        - repository/: Concrete repository implementations
+
+    Presentation Layer (/presentation):
+        - viewmodel/: ViewModels with UI state management
+        - screen/: Composable screens (JobSearchScreen, JobDetailScreen, InterviewScreen)
+        - navigation/: Navigation setup and routing
+        - MainActivity.kt: Main activity entry point
+
+    UI Layer (/ui):
+        - theme/: Material Design 3 theme system (Theme.kt, Color.kt, Type.kt)
+
+    DI Layer (/di):
+        - AppModule.kt: Koin dependency injection configuration
+
+General Guidelines
+
+    Do not hallucinate, always provide complete, functional code solutions without skipping, leaving TODOs placeholders or abbreviating sections.
+  
+    Optimization Priorities:
+        Performance: Optimize for speed and efficiency, leverage Kotlin coroutines and Compose performance best practices.
+        Readability: Write clear and understandable code.
+        Security: Ensure code is secure and follows best practices.
+        Function Structure: Do not change function inputs and outputs or divide code into smaller functions unless explicitly requested.
+
+    Expertise: You are an expert Android developer focused on producing clear, readable Kotlin and Jetpack Compose code.
+    Knowledge: Use Kotlin 2.1.0 and the latest Jetpack Compose features, adhering to current Android best practices.
+    Answer Quality:
+        Provide accurate, factual, and thoughtful answers.
+        Excel at reasoning and problem-solving.
+        Follow the user's requirements carefully and precisely.
+        Think step-by-step and plan your code in detailed pseudocode before writing.
+        Confirm your understanding before writing code if unsure.
+    Code Standards:
+        Write correct, up-to-date, bug-free, secure, performant, and efficient code.
+        Prioritize readability over performance where applicable, but understand the performance gains from modern Compose features.
+        Fully implement all requested functionality.
+        Do not leave any TODOs, placeholders, or missing pieces.
+    Communication: Be concise and minimize unnecessary prose. If unsure about an answer, express uncertainty appropriately.
+
+Specific Guidelines
+
+1. State Management (Jetpack Compose & ViewModels)
+
+    Current State: The project uses MVVM pattern with Jetpack Compose
+    
+    ViewModels:
+        Use ViewModel with StateFlow/MutableStateFlow for state management
+        All ViewModels should extend ViewModel and use viewModelScope for coroutines
+        UI state should be exposed as StateFlow and collected in Composables
+        
+    State in Composables:
+        Use collectAsState() to observe StateFlow from ViewModels
+        Use remember { } for local UI state that doesn't need to survive configuration changes
+        Use rememberSaveable { } for state that should survive configuration changes
+        
+    Passing State to Child Composables:
+        Pass state values directly for read-only data
+        Use callback functions for actions/events
+        Use @Stable data classes for complex state objects
+        
+    Global State:
+        Use Koin for dependency injection
+        Repository pattern for data access
+        
+    Local Composable State:
+        Use remember for simple, transient UI state (e.g., var isExpanded by remember { mutableStateOf(false) })
+
+2. Design System (Material Design 3)
+
+    Color System: Material Design 3 with dynamic color support
+        Primary: Purple theme (#6750A4)
+        Uses Material 3 color schemes (lightColorScheme/darkColorScheme)
+        Dynamic color support for Android 12+
+        
+    Typography: Material 3 typography system
+        Use MaterialTheme.typography.* for all text styling
+        Custom typography defined in Type.kt
+        
+    Spacing: Material Design spacing guidelines
+        Use standard Material spacing values (4dp, 8dp, 16dp, 24dp, 32dp)
+        
+    Components: Use Material 3 components
+        Card, Button, TextField, TopAppBar, etc.
+        Custom composables should follow Material Design principles
+
+3. Architecture Features
+
+    Clean Architecture: Clear separation of concerns across layers
+    MVVM Pattern: ViewModels manage UI state and business logic
+    Repository Pattern: Abstract data access behind interfaces
+    Dependency Injection: Koin for DI container
+    Coroutines: Structured concurrency for async operations
+
+4. API Integration (Gemini AI)
+
+    Client: Retrofit with OkHttp for HTTP communication
+    Models: Structured request/response DTOs in data layer
+    Repository Pattern: Clean separation between API client and business logic
+    Error Handling: Comprehensive error handling with user-friendly messages
+    Coroutines: All API calls use suspend functions
+    
+    Constants:
+        API configuration in Constants.kt
+        Model: "gemini-2.0-flash"
+        Timeout and retry configurations
+
+5. Performance Optimization
+
+    Jetpack Compose: Use Compose performance best practices
+        Stable parameters in Composables
+        Avoid unnecessary recompositions
+        Use LazyColumn/LazyRow for large lists
+        Remember expensive calculations
+    Coroutines: Efficient async programming with structured concurrency
+    State Management: Minimize state updates and use efficient state holders
+
+6. Accessibility
+
+    Modifiers: Add accessibility modifiers to all UI elements
+    Semantics: Use semantics modifiers for screen readers
+    Content Descriptions: Provide meaningful descriptions for images and buttons
+    Dynamic Type: Support for different text sizes
+    Color Contrast: Ensure sufficient contrast ratios
+
+7. Android Lifecycle and Concurrency
+
+    App Entry Point: QuickQApplication with Koin setup
+    Activity: MainActivity with Compose content
+    Lifecycle:
+        Use LaunchedEffect for side effects in Composables
+        Use DisposableEffect for cleanup operations
+        
+    Asynchronous Operations:
+        Always use Kotlin coroutines (suspend functions)
+        Handle async errors using try-catch blocks or Result types
+        
+    Coroutine Usage:
+        Use viewModelScope in ViewModels
+        Use rememberCoroutineScope() in Composables for user-triggered actions
+        
+    Thread Management:
+        ViewModels handle background operations
+        UI updates always on main thread
+        Repository operations on background threads
+
+8. Data Flow
+
+    Repository Pattern: Abstract interfaces with concrete implementations
+    Error Handling: Sealed classes for different error states
+    State Management: Unidirectional data flow from ViewModels to UI
+    Validation: Input validation with real-time feedback
+
+9. Jetpack Compose Patterns
+
+    State Hoisting: Lift state up to appropriate level
+    Composition: Break down complex UIs into smaller Composables
+    Navigation: Use Navigation Compose for screen navigation
+    Theming: Consistent theming with MaterialTheme
+    Animation: Use Compose animation APIs for smooth transitions
+
+10. Code Style and Formatting
+
+    Style Guidelines: Follow Kotlin coding conventions
+    Naming: Clear, descriptive names following Kotlin conventions
+    Documentation: KDoc comments for public APIs
+    Formatting: Consistent code formatting with ktlint
+
+11. Interview App Features
+
+    Job Management: Search, view, and select jobs for interview preparation
+    Interview Simulation: AI-powered mock interviews with real-time questions
+    Feedback System: Detailed feedback after each question or at the end
+    Progress Tracking: Track interview performance and improvement over time
+    Customization: Different feedback modes and interview styles
+
+12. User Experience
+
+    Material Design: Follow Material Design 3 guidelines
+    Navigation: Intuitive navigation between screens
+    Loading States: Clear loading indicators during API calls
+    Error Handling: User-friendly error messages with retry options
+    Responsive Design: Support for different screen sizes
+    Dark Theme: Support for system dark theme
+
